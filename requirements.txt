@@ -1,0 +1,11 @@
+django
+psycopg2
+simplejson
+South
+django-admin-tools
+django-debug_toolbar
+django-piston
+django-staticfiles
+django-tagging
+django-uni_form
+-e git+git://github.com/dottedmag/path.py.git#egg=path_py

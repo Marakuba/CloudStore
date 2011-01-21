@@ -1,0 +1,29 @@
+﻿.tagEditor
+{
+	margin: 4px 0;
+	padding: 0;
+	height: 40px;
+	width: 100%;
+}
+
+.tagEditor li
+{
+	/*display: inline;*/
+	float:left;
+	background-image: url(bullet_delete.png);
+	background-color: #eef;
+	background-position: right center;
+	background-repeat: no-repeat;
+	list-style-type: none;
+	padding: 0 18px 0 6px;
+	margin: 0 4px;	
+	cursor: pointer;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.tagEditor li:hover
+{
+	background-color: #eee;
+}
