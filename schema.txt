@@ -1,0 +1,246 @@
+CREATE TABLE "accounts_company" (
+    "user_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "auth_user" ("id"),
+    "full_name" varchar(255)
+);
+CREATE TABLE "accounts_user" (
+    "user_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "auth_user" ("id"),
+    "icq" decimal
+);
+CREATE TABLE "auth_group" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(80) NOT NULL UNIQUE
+);
+CREATE TABLE "auth_group_permissions" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "group_id" integer NOT NULL,
+    "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id"),
+    UNIQUE ("group_id", "permission_id")
+);
+CREATE TABLE "auth_message" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "user_id" integer NOT NULL REFERENCES "auth_user" ("id"),
+    "message" text NOT NULL
+);
+CREATE TABLE "auth_permission" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(50) NOT NULL,
+    "content_type_id" integer NOT NULL,
+    "codename" varchar(100) NOT NULL,
+    UNIQUE ("content_type_id", "codename")
+);
+CREATE TABLE "auth_user" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "username" varchar(30) NOT NULL UNIQUE,
+    "first_name" varchar(30) NOT NULL,
+    "last_name" varchar(30) NOT NULL,
+    "email" varchar(75) NOT NULL,
+    "password" varchar(128) NOT NULL,
+    "is_staff" bool NOT NULL,
+    "is_active" bool NOT NULL,
+    "is_superuser" bool NOT NULL,
+    "last_login" datetime NOT NULL,
+    "date_joined" datetime NOT NULL
+);
+CREATE TABLE "auth_user_groups" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "user_id" integer NOT NULL,
+    "group_id" integer NOT NULL REFERENCES "auth_group" ("id"),
+    UNIQUE ("user_id", "group_id")
+);
+CREATE TABLE "auth_user_user_permissions" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "user_id" integer NOT NULL,
+    "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id"),
+    UNIQUE ("user_id", "permission_id")
+);
+CREATE TABLE "classifiers_icd10" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(512) NOT NULL,
+    "code" varchar(20) NOT NULL,
+    "description" text NOT NULL,
+    "parent_id" integer,
+    "lft" integer unsigned NOT NULL,
+    "rght" integer unsigned NOT NULL,
+    "tree_id" integer unsigned NOT NULL,
+    "level" integer unsigned NOT NULL
+);
+CREATE TABLE "classifiers_mkb" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "code" varchar(10) NOT NULL UNIQUE,
+    "name" varchar(512) NOT NULL,
+    "parent_id" integer,
+    "lft" integer unsigned NOT NULL,
+    "rght" integer unsigned NOT NULL,
+    "tree_id" integer unsigned NOT NULL,
+    "level" integer unsigned NOT NULL
+);
+CREATE TABLE "classifiers_relform" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(500) NOT NULL UNIQUE
+);
+CREATE TABLE "classifiers_routadm" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(500) NOT NULL UNIQUE
+);
+CREATE TABLE "classifiers_unitmeas" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(500) NOT NULL UNIQUE
+);
+CREATE TABLE "django_admin_log" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "action_time" datetime NOT NULL,
+    "user_id" integer NOT NULL REFERENCES "auth_user" ("id"),
+    "content_type_id" integer REFERENCES "django_content_type" ("id"),
+    "object_id" text,
+    "object_repr" varchar(200) NOT NULL,
+    "action_flag" smallint unsigned NOT NULL,
+    "change_message" text NOT NULL
+);
+CREATE TABLE "django_content_type" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(100) NOT NULL,
+    "app_label" varchar(100) NOT NULL,
+    "model" varchar(100) NOT NULL,
+    UNIQUE ("app_label", "model")
+);
+CREATE TABLE "django_session" (
+    "session_key" varchar(40) NOT NULL PRIMARY KEY,
+    "session_data" text NOT NULL,
+    "expire_date" datetime NOT NULL
+);
+CREATE TABLE "django_site" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "domain" varchar(100) NOT NULL,
+    "name" varchar(50) NOT NULL
+);
+CREATE TABLE "drugs_drug" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "tnn" varchar(512) NOT NULL,
+    "mnn" varchar(512),
+    "doza" real,
+    "unitmeas_id" integer REFERENCES "classifiers_unitmeas" ("id"),
+    "relform_id" integer REFERENCES "classifiers_relform" ("id"),
+    "count" smallint unsigned,
+    "cost" real,
+    "routadm_id" integer REFERENCES "classifiers_routadm" ("id"),
+    "farmgroup_id" integer REFERENCES "drugs_farmgroup" ("id")
+);
+CREATE TABLE "drugs_farmgroup" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(512) NOT NULL UNIQUE,
+    "parent_id" integer,
+    "lft" integer unsigned NOT NULL,
+    "rght" integer unsigned NOT NULL,
+    "tree_id" integer unsigned NOT NULL,
+    "level" integer unsigned NOT NULL
+);
+CREATE TABLE "services_clingroup" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "fullcode" varchar(128) NOT NULL UNIQUE,
+    "name" varchar(512) NOT NULL,
+    "parent_id" integer,
+    "lft" integer unsigned NOT NULL,
+    "rght" integer unsigned NOT NULL,
+    "tree_id" integer unsigned NOT NULL,
+    "level" integer unsigned NOT NULL
+);
+CREATE TABLE "services_service" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "code" varchar(14) NOT NULL,
+    "name" varchar(512) NOT NULL,
+    "tzv" real,
+    "tzm" real,
+    "reag" real,
+    "ueta_id" integer REFERENCES "services_ueta" ("id"),
+    "clingroup_id" integer REFERENCES "services_clingroup" ("id")
+);
+CREATE TABLE "services_ueta" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(512) NOT NULL UNIQUE,
+    "zp_vrach" real NOT NULL,
+    "zp_sestra" real NOT NULL,
+    "medikam" real NOT NULL,
+    "miagk_inv" real NOT NULL,
+    "nakl_rash" real NOT NULL,
+    "proch_rash" real NOT NULL
+);
+CREATE TABLE "standards_basketdrugs" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "standart_id" integer NOT NULL REFERENCES "standards_standart" ("id"),
+    "drug_id" integer NOT NULL REFERENCES "drugs_drug" ("id"),
+    "krt" real NOT NULL,
+    "prm" smallint unsigned NOT NULL,
+    "dk" smallint unsigned NOT NULL,
+    UNIQUE ("standart_id", "drug_id")
+);
+CREATE TABLE "standards_basketservicesone" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "standart_id" integer NOT NULL REFERENCES "standards_standart" ("id"),
+    "service_id" integer NOT NULL REFERENCES "services_service" ("id"),
+    "krt" real NOT NULL,
+    "prm" smallint unsigned NOT NULL,
+    UNIQUE ("standart_id", "service_id")
+);
+CREATE TABLE "standards_basketservicestwo" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "standart_id" integer NOT NULL REFERENCES "standards_standart" ("id"),
+    "service_id" integer NOT NULL REFERENCES "services_service" ("id"),
+    "krt" real NOT NULL,
+    "prm" smallint unsigned NOT NULL,
+    UNIQUE ("standart_id", "service_id")
+);
+CREATE TABLE "standards_standart" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "code" smallint unsigned NOT NULL UNIQUE,
+    "name" varchar(500) NOT NULL UNIQUE
+);
+CREATE TABLE "standards_standart_mkbs" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "standart_id" integer NOT NULL,
+    "mkb_id" integer NOT NULL REFERENCES "classifiers_mkb" ("id"),
+    UNIQUE ("standart_id", "mkb_id")
+);
+CREATE INDEX "auth_group_permissions_1e014c8f" ON "auth_group_permissions" ("permission_id");
+CREATE INDEX "auth_group_permissions_425ae3c4" ON "auth_group_permissions" ("group_id");
+CREATE INDEX "auth_message_403f60f" ON "auth_message" ("user_id");
+CREATE INDEX "auth_permission_1bb8f392" ON "auth_permission" ("content_type_id");
+CREATE INDEX "auth_user_groups_403f60f" ON "auth_user_groups" ("user_id");
+CREATE INDEX "auth_user_groups_425ae3c4" ON "auth_user_groups" ("group_id");
+CREATE INDEX "auth_user_user_permissions_1e014c8f" ON "auth_user_user_permissions" ("permission_id");
+CREATE INDEX "auth_user_user_permissions_403f60f" ON "auth_user_user_permissions" ("user_id");
+CREATE INDEX "classifiers_icd10_102f80d8" ON "classifiers_icd10" ("tree_id");
+CREATE INDEX "classifiers_icd10_2a8f42e8" ON "classifiers_icd10" ("level");
+CREATE INDEX "classifiers_icd10_42b06ff6" ON "classifiers_icd10" ("lft");
+CREATE INDEX "classifiers_icd10_63f17a16" ON "classifiers_icd10" ("parent_id");
+CREATE INDEX "classifiers_icd10_6eabc1a6" ON "classifiers_icd10" ("rght");
+CREATE INDEX "classifiers_mkb_102f80d8" ON "classifiers_mkb" ("tree_id");
+CREATE INDEX "classifiers_mkb_2a8f42e8" ON "classifiers_mkb" ("level");
+CREATE INDEX "classifiers_mkb_42b06ff6" ON "classifiers_mkb" ("lft");
+CREATE INDEX "classifiers_mkb_63f17a16" ON "classifiers_mkb" ("parent_id");
+CREATE INDEX "classifiers_mkb_6eabc1a6" ON "classifiers_mkb" ("rght");
+CREATE INDEX "django_admin_log_1bb8f392" ON "django_admin_log" ("content_type_id");
+CREATE INDEX "django_admin_log_403f60f" ON "django_admin_log" ("user_id");
+CREATE INDEX "drugs_drug_3932b8e4" ON "drugs_drug" ("relform_id");
+CREATE INDEX "drugs_drug_4ab9839c" ON "drugs_drug" ("farmgroup_id");
+CREATE INDEX "drugs_drug_570b1b35" ON "drugs_drug" ("routadm_id");
+CREATE INDEX "drugs_drug_6af6c38" ON "drugs_drug" ("unitmeas_id");
+CREATE INDEX "drugs_farmgroup_102f80d8" ON "drugs_farmgroup" ("tree_id");
+CREATE INDEX "drugs_farmgroup_2a8f42e8" ON "drugs_farmgroup" ("level");
+CREATE INDEX "drugs_farmgroup_42b06ff6" ON "drugs_farmgroup" ("lft");
+CREATE INDEX "drugs_farmgroup_63f17a16" ON "drugs_farmgroup" ("parent_id");
+CREATE INDEX "drugs_farmgroup_6eabc1a6" ON "drugs_farmgroup" ("rght");
+CREATE INDEX "services_clingroup_102f80d8" ON "services_clingroup" ("tree_id");
+CREATE INDEX "services_clingroup_2a8f42e8" ON "services_clingroup" ("level");
+CREATE INDEX "services_clingroup_42b06ff6" ON "services_clingroup" ("lft");
+CREATE INDEX "services_clingroup_63f17a16" ON "services_clingroup" ("parent_id");
+CREATE INDEX "services_clingroup_6eabc1a6" ON "services_clingroup" ("rght");
+CREATE INDEX "services_service_17bb04b3" ON "services_service" ("ueta_id");
+CREATE INDEX "services_service_28b19434" ON "services_service" ("clingroup_id");
+CREATE INDEX "standards_basketdrugs_2f30f036" ON "standards_basketdrugs" ("drug_id");
+CREATE INDEX "standards_basketdrugs_3d413a61" ON "standards_basketdrugs" ("standart_id");
+CREATE INDEX "standards_basketservicesone_3d413a61" ON "standards_basketservicesone" ("standart_id");
+CREATE INDEX "standards_basketservicesone_6f1d73c2" ON "standards_basketservicesone" ("service_id");
+CREATE INDEX "standards_basketservicestwo_3d413a61" ON "standards_basketservicestwo" ("standart_id");
+CREATE INDEX "standards_basketservicestwo_6f1d73c2" ON "standards_basketservicestwo" ("service_id");
+CREATE INDEX "standards_standart_mkbs_3d413a61" ON "standards_standart_mkbs" ("standart_id");
+CREATE INDEX "standards_standart_mkbs_6f7f42b" ON "standards_standart_mkbs" ("mkb_id");
