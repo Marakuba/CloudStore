@@ -57,11 +57,14 @@ INSTALLED_APPS = (
     #'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.messages',
+    'south',
     'mptt',    
     'feincms',
     'staticfiles',
     'debug_toolbar',
     'apps.accounts',
+    'apps.classifiers',
+    'apps.operations',
 
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
