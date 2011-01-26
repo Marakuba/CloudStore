@@ -47,7 +47,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
 )
 
-ROOT_URLCONF = 'cloudstore.urls'
+ROOT_URLCONF = 'CloudStore.urls'
 
 MIDDLEWARE_CLASSES = (
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -78,7 +78,7 @@ INSTALLED_APPS = (
     #'autocomplete',
     'debug_toolbar',
     #'piston',
-    'south',
+#    'south',
     #'staticfiles',
     #'tagging',
     #'uni_form',
