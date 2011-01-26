@@ -11,7 +11,7 @@ class InvoiceType(models.Model):
         ordering = ('name',)
 
     def __unicode__(self):
-        return '%s'  %(self.name)
+        return u'%s'  %(self.name)
 
 class Invoice(models.Model):
     create = models.DateTimeField(u'дата, время', auto_now_add=True)
@@ -24,7 +24,7 @@ class Invoice(models.Model):
         ordering = ('create',)    
 
     def __unicode__(self):
-        return '%s - %s'  %(self.create,self.pk)
+        return u'N %s от %s'  %(self.pk,self.create)
 
 class Entry(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name=u'документ')
@@ -39,4 +39,8 @@ class Entry(models.Model):
         ordering = ('invoice',)    
 
     def __unicode__(self):
-        return 'Entry: %s - %s'  %(self.invoice,self.pk)
+        return u'Entry N : %s по док-у %s'  %(self.pk,self.invoice)
+    
+    def unitmeas(self):
+        return self.service.unitmeas
+    unitmeas.short_description = u'ед.изм.'

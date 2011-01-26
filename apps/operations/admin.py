@@ -9,6 +9,9 @@ class InvoiceTypeAdmin(admin.ModelAdmin):
     search_fields = ['name',]
     
 class EntryInline(admin.TabularInline):
+    raw_id_fields = ('service',)
+    readonly_fields = ('unitmeas',)
+    fields = ('service','stock','count')
     model = Entry
     extra = 0
 

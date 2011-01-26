@@ -41,7 +41,7 @@ class Service(models.Model):
         ordering = ('name',)
 
     def __unicode__(self):
-        return '%s'  %(self.name)
+        return '%s '  %(self.name)
 
 class Stock(models.Model):
     name =  models.CharField(u'наименование', max_length=256,unique=True)
