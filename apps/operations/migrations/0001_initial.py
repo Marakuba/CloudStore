@@ -11,8 +11,10 @@ class Migration(SchemaMigration):
         # Adding model 'Invoice'
         db.create_table('operations_invoice', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('create', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('create', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 27, 23, 26, 20, 330888))),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Organization'])),
+            ('stock', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Stock'])),
+            ('invoicetype', self.gf('django.db.models.fields.CharField')(max_length=1)),
             ('comment', self.gf('django.db.models.fields.TextField')(default='', blank=True)),
         ))
         db.send_create_signal('operations', ['Invoice'])
@@ -22,7 +24,6 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('invoice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['operations.Invoice'])),
             ('service', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Service'])),
-            ('stock', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Stock'])),
             ('count', self.gf('django.db.models.fields.FloatField')()),
             ('cost', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=2)),
         ))
@@ -77,15 +78,16 @@ class Migration(SchemaMigration):
             'count': ('django.db.models.fields.FloatField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['operations.Invoice']"}),
-            'service': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Service']"}),
-            'stock': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Stock']"})
+            'service': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Service']"})
         },
         'operations.invoice': {
             'Meta': {'ordering': "('create',)", 'object_name': 'Invoice'},
             'comment': ('django.db.models.fields.TextField', [], {'default': "''", 'blank': 'True'}),
-            'create': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'create': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 27, 23, 26, 20, 330888)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Organization']"})
+            'invoicetype': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Organization']"}),
+            'stock': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Stock']"})
         }
     }
 

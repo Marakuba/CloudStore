@@ -12,6 +12,7 @@ INVOICE_TYPES = (
 class Invoice(models.Model):
     create = models.DateTimeField(u'создан', default=datetime.datetime.now())
     organization = models.ForeignKey(Organization, verbose_name=u'организация')
+    stock = models.ForeignKey(Stock, verbose_name=u'склад')
     invoicetype = models.CharField(u'тип', max_length=1, choices=INVOICE_TYPES)
     comment = models.TextField(u'коммент.', default='', blank=True)
 
@@ -26,7 +27,6 @@ class Invoice(models.Model):
 class Entry(models.Model):
     invoice = models.ForeignKey(Invoice, verbose_name=u'документ')
     service = models.ForeignKey(Service, verbose_name=u'товар/услуга')
-    stock = models.ForeignKey(Stock, verbose_name=u'склад')
     count = models.FloatField(u'кол-во')
     cost = models.DecimalField(u'цена', max_digits=10, decimal_places=2,null=True)
 

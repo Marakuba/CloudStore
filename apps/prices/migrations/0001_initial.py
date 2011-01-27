@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
         # Adding model 'CurrRate'
         db.create_table('prices_currrate', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('create', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('create', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 27, 23, 26, 56, 101143))),
             ('rete', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=2)),
             ('currency', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['prices.Currency'])),
         ))
@@ -36,7 +36,7 @@ class Migration(SchemaMigration):
         # Adding model 'PriceRete'
         db.create_table('prices_pricerete', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('create', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('create', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 27, 23, 26, 56, 103745))),
             ('service', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Service'])),
             ('price', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=2)),
             ('pricetype', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['prices.PriceType'])),
@@ -46,7 +46,7 @@ class Migration(SchemaMigration):
         # Adding model 'ConvfactorRete'
         db.create_table('prices_convfactorrete', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('create', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('create', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2011, 1, 27, 23, 26, 56, 105241))),
             ('service', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Service'])),
             ('convfactor', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=2)),
         ))
@@ -97,7 +97,7 @@ class Migration(SchemaMigration):
         'prices.convfactorrete': {
             'Meta': {'object_name': 'ConvfactorRete'},
             'convfactor': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2'}),
-            'create': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'create': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 27, 23, 26, 56, 105241)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'service': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Service']"})
         },
@@ -108,14 +108,14 @@ class Migration(SchemaMigration):
         },
         'prices.currrate': {
             'Meta': {'object_name': 'CurrRate'},
-            'create': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'create': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 27, 23, 26, 56, 101143)'}),
             'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['prices.Currency']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'rete': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2'})
         },
         'prices.pricerete': {
             'Meta': {'object_name': 'PriceRete'},
-            'create': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'create': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2011, 1, 27, 23, 26, 56, 103745)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'price': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2'}),
             'pricetype': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['prices.PriceType']"}),
