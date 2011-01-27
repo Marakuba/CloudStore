@@ -10,9 +10,9 @@ INVOICE_TYPES = (
     (u'z',u'завяка'),
 )
 class Invoice(models.Model):
-    create = models.DateTimeField(u'дата, время', default=datetime.datetime.now())
+    create = models.DateTimeField(u'создан', default=datetime.datetime.now())
     organization = models.ForeignKey(Organization, verbose_name=u'организация')
-#    invoicetype = models.CharField(u'тип', max_length=1, choices=INVOICE_TYPES)
+    invoicetype = models.CharField(u'тип', max_length=1, choices=INVOICE_TYPES)
     comment = models.TextField(u'коммент.', default='', blank=True)
 
     class Meta:
