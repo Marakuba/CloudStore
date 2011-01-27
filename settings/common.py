@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'apps.accounts',
     'apps.classifiers',
     'apps.operations',
+    'apps.prices',
 
 )
 TEMPLATE_CONTEXT_PROCESSORS = (

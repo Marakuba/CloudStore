@@ -8,19 +8,12 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'InvoiceType'
-        db.create_table('operations_invoicetype', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=256)),
-        ))
-        db.send_create_signal('operations', ['InvoiceType'])
-
         # Adding model 'Invoice'
         db.create_table('operations_invoice', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('create', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('organization', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Organization'])),
-            ('invoicetype', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['operations.InvoiceType'])),
+            ('comment', self.gf('django.db.models.fields.TextField')(default='', blank=True)),
         ))
         db.send_create_signal('operations', ['Invoice'])
 
@@ -31,16 +24,13 @@ class Migration(SchemaMigration):
             ('service', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Service'])),
             ('stock', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['classifiers.Stock'])),
             ('count', self.gf('django.db.models.fields.FloatField')()),
-            ('comment', self.gf('django.db.models.fields.TextField')(default='', blank=True)),
+            ('cost', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=2)),
         ))
         db.send_create_signal('operations', ['Entry'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'InvoiceType'
-        db.delete_table('operations_invoicetype')
-
         # Deleting model 'Invoice'
         db.delete_table('operations_invoice')
 
@@ -83,7 +73,7 @@ class Migration(SchemaMigration):
         },
         'operations.entry': {
             'Meta': {'ordering': "('invoice',)", 'object_name': 'Entry'},
-            'comment': ('django.db.models.fields.TextField', [], {'default': "''", 'blank': 'True'}),
+            'cost': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '2'}),
             'count': ('django.db.models.fields.FloatField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['operations.Invoice']"}),
@@ -92,15 +82,10 @@ class Migration(SchemaMigration):
         },
         'operations.invoice': {
             'Meta': {'ordering': "('create',)", 'object_name': 'Invoice'},
+            'comment': ('django.db.models.fields.TextField', [], {'default': "''", 'blank': 'True'}),
             'create': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'invoicetype': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['operations.InvoiceType']"}),
             'organization': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['classifiers.Organization']"})
-        },
-        'operations.invoicetype': {
-            'Meta': {'ordering': "('name',)", 'object_name': 'InvoiceType'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '256'})
         }
     }
 
